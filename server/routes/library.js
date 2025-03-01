@@ -6,13 +6,26 @@ const { Library } = require('../database/index');
 const route = express.Router();
 
 // handle GET requests
-route.get('/', (req, res) => {
-
+route.get('/library', (req, res) => {
+Library.find({})
+.then(()=>{
+res.send(200).send("Success finding playlist")
+})
+.catch((err)=>{
+  console.error("Failure to find playlist:", err)
+  res.sendStatus(500);
+})
 });
 
 // handle POST requests
 route.post('/', (req, res) => {
+Library.create()
+.then (()=>{
 
+})
+.catch((err)=>{
+console.error()
+})
 });
 
 // handle PATCH requests
