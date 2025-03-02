@@ -27,6 +27,7 @@ class App extends React.Component {
         <nav className='main-nav'>Slime Wire</nav>
         <div className='main-content'>
           <Search handleSearch={this.searchDeezer} />
+          <Library/>
         </div>
       </div>
     );

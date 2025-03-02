@@ -6,7 +6,7 @@ const { Library } = require('../database/index');
 const route = express.Router();
 
 // handle GET requests
-route.get('/library', (req, res) => {
+route.get('/', (req, res) => {
 Library.find({})
 .then(()=>{
 res.send(200).send("Success finding playlist")
