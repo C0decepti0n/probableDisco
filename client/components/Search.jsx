@@ -11,14 +11,12 @@ const Search = ({ handleSearch }) => {
   };
   return (
     // search for query
-    <div className='search-container'>
-      <div className='search-input-group'>
-        <label className='search-query'>Search</label>
-        <input className='form-control' type='text' onChange={change} />
-        <button className='btn hidden-sm-down'>
-          <span className='glyphicon glyphicon-search'></span>
-        </button>
-      </div>
+<div className="input-group">
+<input type="text" className="form-control" placeholder="Search" aria-label="Search" />
+<button className="btn btn-primary">
+<span className="glyphicon glyphicon-search"></span>🔎
+</button>
+
     </div>
   );
 };
