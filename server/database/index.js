@@ -23,5 +23,6 @@ module.exports = {
   Comments,
   Library,
   Queue,
-  Settings
+  Settings,
+  Songs
 }
