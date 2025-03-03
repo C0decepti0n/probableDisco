@@ -11,7 +11,7 @@ const settingsRoute = require('./routes/settings');
 // create express app
 const application = express();
 // select port number
-const portNum = 3000;
+const portNum = 3001;
 
 // middleware
 application.use(express.json());
