@@ -5,7 +5,7 @@ const { Schema, model } = mongoose;
 const SongsSchema = new Schema(
   {
    'id': Number,
-   'readable': true,
+   'readable': Boolean,
    'title': String,
    'link': String,
    'rank': Number,
