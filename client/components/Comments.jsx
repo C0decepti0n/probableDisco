@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 //create the Comments component
-const Comments = ({ songId }) => {
+const Comments = ({ songId, theme }) => {
 
   //stateto hold the list of comments from the server
 

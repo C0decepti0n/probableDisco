@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 const axios = require ('axios');
 
-function Library () {
+function Library ({theme}) {
 
   const [songs, setSongs] = useState([]); 
   const [searchQuery, setSearchQuery] = useState(""); 
