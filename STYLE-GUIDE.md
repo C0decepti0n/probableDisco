@@ -1,5 +1,5 @@
 Global:
-- Always use single quotes (') when writing strings, unless said string is used with an html element's attribute, in which case you would use double quotes (").
+- Always use single quotes (') when writing strings, unless said string is used with a JSON file, in which case you would use double quotes (").
 - Excluding jsx files, you should usually use 'require' instead of import when importing from another file or dependency.
 
 

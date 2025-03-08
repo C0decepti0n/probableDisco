@@ -2,7 +2,7 @@
 
 Product Owner = Charles
 
-Scrum Master = Mary
+Scrum Master = Mary and Peyton
 
 Dev Team = Charles, Mary, Peyton, Jay, and Whitley
 
