@@ -4,13 +4,12 @@ const { Schema, model } = mongoose;
 
 const SongsSchema = new Schema(
   {
-   'id': Number,
+   'trackId': Number,
    'title': String,
    'link': String,
-   'rank': Number,
-   'artist': String,
-   'album': String
-
+   'preview': String,
+   'artist': { 'name': String, 'id': Number },
+   'album': { 'title': String, 'id': Number },
   }
 );
 

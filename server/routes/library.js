@@ -5,9 +5,8 @@ const { Library } = require('../database/index');
 
 const route = express.Router();
 
-
-// TODO : loads when Library component renders
-// handle GET requests for all playlists
+// * Load User Playlists when Library Component renders
+// TODO : setState in Library.jsx
 route.get('/', (req, res) => { 
 // mongooose method to find
 Library.find({})
@@ -18,12 +17,12 @@ Library.find({})
       res.status(400).send("No playlist found!")
     }
     // successful status fetching playlits
-  res.status(200).send(playlists)
+    res.status(200).send(playlists)
   })
   .catch((err)=>{
-  console.error("Failure to find playlist:", err)in
-  // internal service error
-  res.sendStatus(500);
+    console.error("Failure to find playlist:", err)in
+    // internal service error
+    res.sendStatus(500);
   })
 });
 
@@ -35,7 +34,6 @@ Library.find({})
 
 route.post('/', (req, res) => { 
   const {playlist} = req.body
-  
   // mongoose method to create
   Library.create(playlist)
     .then(()=>{
@@ -50,40 +48,33 @@ route.post('/', (req, res) => {
 });
 
 //* Update Playlist (add song)
-// TODO: decide button config at Search Component
-  //* Add to new playlist "Create and Add to new Playlist"
-  //* Button at Library Component
-// handle PATCH requests
+// TODO: decide trigger point location (Library Component and/or Advanced Search)
 route.patch('/', (req, res) => {x
   Library.findByIdAndUpdate(req.params, req.body)
-
-.then(()=>{
-  //ok sucess status for update
-res.status(200).send("Update was successful!")
-})
-.catch((err)=>{
-console.error("Failure to update playlist!:", err)
-// internal failure error
-res.sendStatus(500);
-})
+  .then(()=>{
+    //ok sucess status for update
+    res.status(200).send("Update was successful!")
+  })
+  .catch((err)=>{
+    console.error("Failure to update playlist!:", err)
+    // internal failure error
+    res.sendStatus(500);
+  })
 });
 
-// TODO : connect to button in library
-// handle DELETE requests
+// * Delete Playlist
+// TODO : trigger with button in Library Component
 route.delete('/', (req, res) => { 
   Library.findByIdAndDelete(req.params.id)
   .then(()=>{
-      //ok success status for deletion
-
+    //ok success status for deletion
     res.status(200).send("Playlist has been deleted!")
-
   })
   .catch((err)=>{
-console.error("Failure to delete playlist!:", err);
-// internal failure error
-res.sendStatus(500);
+    console.error("Failure to delete playlist!:", err);
+    // internal failure error
+    res.sendStatus(500);
   })
-
 });
 
 // export the route for use in server/index.js

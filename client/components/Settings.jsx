@@ -20,14 +20,13 @@ function Settings({ themes, setThemes, theme, setTheme}) {
   }, []);
 
   useEffect(() => {
-    // any time themes is altered, set the current theme to the first theme in themes (but only if the current theme is null and if the themes state have already been set OR if the current theme is no longer present in the themes array)
+    // any time themes is altered, set the current theme to the first theme in themes (but only if the current theme is no longer present in the themes array and the first theme in the themes array is not undefined)
     // aka, changes theme only upon the first time that themes is altered OR whenever a theme gets deleted
-    if ((theme === null && themes.length !== 0) || !themes.includes(theme)) {
+    if (!themes.includes(theme) && themes[0] !== undefined) {
       setTheme(themes[0]);
     }
   }, [themes])
 
-  /////LOOOK AT MEEEEE
   // TESTING LOGGING
   useEffect(() => {
     console.log(theme, themes)
@@ -87,8 +86,7 @@ function Settings({ themes, setThemes, theme, setTheme}) {
     axios.delete(`/settings/${theme._id}`, {
       data: {userId: theme.userId}
     })
-      .then((idk) => {
-        console.log(idk)  /////LOOOK AT MEEEEE
+      .then(() => {
         // set themes in App's state to be the new list of themes in the db by calling getThemes
         getThemes();
       })
@@ -97,12 +95,6 @@ function Settings({ themes, setThemes, theme, setTheme}) {
         console.error('Failed to delete current theme in database', err);
       });
   };
-
-  /////LOOOK AT MEEEEE
-  // const setCurrentTheme = (selectedTheme) => {
-  //   // set the theme in App's state to be the theme you want the application to currently be using
-  //   setTheme(selectedTheme);
-  // }
 
   const updateFormValues = (key, value) => {
     console.log(value);
@@ -117,10 +109,10 @@ function Settings({ themes, setThemes, theme, setTheme}) {
   }
 
   return (
-    <div id="settings">
-      <span style={{fontWeight:'bold'}}>Theme Loadouts</span>
+    <div style={{background:theme.secondaryColor, borderColor:theme.tertiaryColor, borderWidth:5, borderStyle:'solid', borderRadius:theme.borderRadius}}>
+      <span style={{color:theme.primaryColor, display:'block', fontFamily:theme.font, fontWeight:'bold'}}>Theme Loadouts</span>
       {/* set the current theme to the selected theme from the list of option tags in the select tag */}
-      <select id="themes" onChange={e => setTheme(themes[e.target.options.selectedIndex])}>
+      <select id='themes' onChange={e => setTheme(themes[e.target.options.selectedIndex])}>
         {
           themes.map((themeObj) => {
             return (
@@ -133,28 +125,26 @@ function Settings({ themes, setThemes, theme, setTheme}) {
       </select>
       <button onClick={deleteTheme}>Delete Theme</button>
       {/* forms can be filled out with info that is saved in state and then is used for either POST requests or Patch requests */}
-      <div id="forms">
-        {
-          <div key="idk">
-            <span style={{color:'darkgrey'}}>Theme Name</span>
-            <input onChange={e => updateFormValues('themeName', e.target.value)} placeholder="insert the name of your theme"></input>
-            <span style={{color:'darkgrey'}}>Primary Color</span>
-            <input onChange={e => updateFormValues('primaryColor', e.target.value)} placeholder="insert primary color (can be name or hex value)"></input>
-            <span style={{color:'darkgrey'}}>Secondary Color</span>
-            <input onChange={e => updateFormValues('secondaryColor', e.target.value)} placeholder="insert secondary color (can be name or hex value)"></input>
-            <span style={{color:'darkgrey'}}>Tertiary Color</span>
-            <input onChange={e => updateFormValues('tertiaryColor', e.target.value)} placeholder="insert tertiary color (can be name or hex value)"></input>
-            <span style={{color:'darkgrey'}}>Custom cursor image</span>
-            <input onChange={e => updateFormValues('cursor', e.target.value)} placeholder="insert image link for you mouse cursor"></input>
-            <span style={{color:'darkgrey'}}>Font</span>
-            <input onChange={e => updateFormValues('font', e.target.value)} placeholder="insert name of desired font"></input>
-            <span style={{color:'darkgrey'}}>Corner Rounding</span>
-            <input onChange={e => updateFormValues('borderRadius', e.target.value)} placeholder="insert number (of pixels) you want to round the corners of boxes by" type="number"></input>
-          </div>
-        }
-        <div>Using these forms, you can:</div>
+      <div style={{background:theme.secondaryColor, borderColor:theme.tertiaryColor, borderWidth:5, borderStyle:'solid', borderRadius:theme.borderRadius}}>
+        <div style={{background:theme.secondaryColor, borderColor:theme.tertiaryColor, borderWidth:5, borderStyle:'solid', borderRadius:theme.borderRadius}}>
+          <span style={{color:theme.primaryColor, display:'block', fontFamily:theme.font}}>Theme Name</span>
+          <input style={{width:'90%'}} onChange={e => updateFormValues('themeName', e.target.value)} placeholder='insert the name of your theme'></input>
+          <span style={{color:theme.primaryColor, display:'block', fontFamily:theme.font}}>Primary Color [text]</span>
+          <input style={{width:'90%'}} onChange={e => updateFormValues('primaryColor', e.target.value)} placeholder='insert primary color (can be name or hex value)'></input>
+          <span style={{color:theme.primaryColor, display:'block', fontFamily:theme.font}}>Secondary Color [background]</span>
+          <input style={{width:'90%'}} onChange={e => updateFormValues('secondaryColor', e.target.value)} placeholder='insert secondary color (can be name or hex value)'></input>
+          <span style={{color:theme.primaryColor, display:'block', fontFamily:theme.font}}>Tertiary Color [border]</span>
+          <input style={{width:'90%'}} onChange={e => updateFormValues('tertiaryColor', e.target.value)} placeholder='insert tertiary color (can be name or hex value)'></input>
+          <span style={{color:theme.primaryColor, display:'block', fontFamily:theme.font}}>Custom cursor image</span>
+          <input style={{width:'90%'}} onChange={e => updateFormValues('cursor', e.target.value)} placeholder='insert image link for you mouse cursor (max size is 128x128) (leave blank for auto)'></input>
+          <span style={{color:theme.primaryColor, display:'block', fontFamily:theme.font}}>Font</span>
+          <input style={{width:'90%'}} onChange={e => updateFormValues('font', e.target.value)} placeholder='insert name of desired font'></input>
+          <span style={{color:theme.primaryColor, display:'block', fontFamily:theme.font}}>Corner Rounding</span>
+          <input style={{width:'90%'}} onChange={e => updateFormValues('borderRadius', e.target.value)} placeholder='insert number (of pixels) you want to round the corners of boxes by' type='number'></input>
+        </div>
+        <span style={{color:theme.primaryColor, display:'block', fontFamily:theme.font}}>Using these forms, you can:</span>
         <button onClick={addTheme}>Add Theme</button>
-        <button onClick={updateTheme}>Update Current Theme <span style={{color:'darkgrey'}}>empty fields are ignored</span></button>
+        <button onClick={updateTheme}>Update Current Theme <span style={{color:'dimgrey'}}>empty fields are ignored</span></button>
       </div>
     </div>
   )

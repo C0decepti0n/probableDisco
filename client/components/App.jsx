@@ -13,7 +13,18 @@ import Logo from '../images/slimewire.png';
 
 function App() {
   const [themes, setThemes] = useState([]);
-  const [theme, setTheme] = useState(null);
+  const [theme, setTheme] = useState(
+    {
+      themeName: 'site default',
+      primaryColor: 'black',
+      secondaryColor: 'white',
+      tertiaryColor: 'green',
+      cursor: 'auto',
+      font: 'serif',
+      borderRadius: 0,
+      userId: 0,
+    }
+  );
   const [avatars, setAvatars] = useState([]);
   const [currentImage, setCurrentImage] = useState(
     {
@@ -33,6 +44,13 @@ function App() {
 
   return (
     <Router>
+      <style>
+        {`
+          html {
+            cursor: url(${theme.cursor}), auto;
+          }
+        `}
+      </style>
       <div>
         <img src={Logo} alt='App Logo' style={{ height: 115, width: 500 }} />
         {/* Nav Links */}

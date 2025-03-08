@@ -8,15 +8,24 @@ import React, {
 import axios from 'axios';
 // API Search & axios post
 function Search() {
-  // Hook: useState
+  // * Query Hooks * //
   const [artist, setArtist] = useState(''); // artist query
   const [song, setSong] = useState(''); // song query
   const [album, setAlbum] = useState(''); // album query
   const [results, setResults] = useState([]); // API results
   const [loading, setLoading] = useState(false); // loading state
   const [error, setError] = useState(''); // error handling
+  //* selectedSong = songModel */
+  const [selectedSong, setSelectedSong] = useState({
+    trackId: 0,
+    title: '',
+    link: '',
+    preview: '',
+    artist: { name: '', id: 0},
+    album: { title: '', id: 0}
+  });
 
-  // Handle input changes for song, artist, and album
+  // Query Inputs
   const handleInputChange = e => {
     const { name, value } = e.target;
     if (name === 'artist') setArtist(value);
@@ -24,7 +33,7 @@ function Search() {
     if (name === 'album') setAlbum(value);
   };
 
-  // Create the query string
+  // Query String construction
   const createQueryString = () => {
     let query = '';
     if (artist) query += `artist:'${artist}'`;
@@ -33,29 +42,35 @@ function Search() {
     return query;
   };
 
-  // Handle Submit : make API call
+  // Deezer API call
   const handleSubmit = async e => {
+    // prevents function from running on page render
     e.preventDefault();
-
+    // results handling
     setLoading(true);
+    //TODO : message for no results
     setError('');
     setResults([]);
 
     try {
       // Build the query string with user inputs
       const queryString = createQueryString();
-      if (!queryString) setError('enter at least 1 search term');
-      // Ensure at least one parameter is provided
-
+      if (!queryString) {
+        setError('enter at least 1 search term');
+        return; // prevents API request attempt
+      }
       const response = await fetch(
         `https://api.deezer.com/search?q=${queryString}&limit=10`
       );
+
       if (!response.ok) {
         throw new Error('Failed to fetch results');
       }
 
       const data = await response.json();
-      setResults(data.data || []);
+      console.log('search success')
+      setResults(data.data);
+
     } catch (err) {
       setError(err.message);
     } finally {
@@ -63,12 +78,48 @@ function Search() {
     }
   };
 
-  const addSong = () => {
-    axios.post('/songs');
+  // Handle Song Selection
+  const handleSelect = (result) => {
+    // Check if result type is a track
+    if (!result.type === 'track') console.error('unable to add this format');
+    // Format result to match selectedSong
+    const formattedSong = {
+      trackId: result.id,
+      title: result.title,
+      link: result.link,
+      preview: result.preview || '', // previews can be missing
+      artist: {
+        name: result.artist.name,
+        id: result.artist.id,
+      },
+      album: {
+        title: result.album.title,
+        id: result.album.id,
+      },
+    };
+    // Set State
+    setSelectedSong(formattedSong);
+    // Init post request to server
+    addSong(selectedSong)
+  }
+
+  // Add song from search results to Songs Collection
+  const addSong = (selectedSong) => {
+    // songs endpoint and selectSong from state
+    axios.post('/songs', selectedSong )
+    // success handling
+    .then(() => {
+      // TODO : render client side success message
+      console.log(`${selectedSong.title} added to collection`);
+    })
+    // error handling
+    .catch((err) => {
+      console.error('Add song failed at client:', err);
+    });
   };
 
   return (
-    <div className='advanced-search'>
+    <div style={{ paddingBottom: '200px' }} className='advanced-search'>
       <h1 style={{ fontFamily: 'creepster' }}> Advanced Search </h1>
       <div className='search-container'>
         <h3>
@@ -122,12 +173,21 @@ function Search() {
       <div className='results-container'>
         <ul style={{ listStyleType: 'none' }}>
           {results.map((result, index) => (
-            <li key={index}>
+            <li 
+              key={index} 
+              className={`p-2 rounded ${
+                selectedSong === result ? "bg-blue-500 text-white" : "bg-gray-200"
+              }`}
+            >
               <strong>{result.title}</strong> by {result.artist.name} from (
               {result.album.title})
-              {/*// TODO : buttons and relationship with server side requests and database collections (songs, library, and queue) */}
-              <button>add to songs</button>
-              <button>play now</button> {/** queue */}
+              <button
+                className="ml-2 bg-gray-800 text-white px-3 py-1 rounded"
+                onClick={() => handleSelect(result)}
+              >
+                Add to songs
+              </button>
+             {/** <button>play now</button>  queue */}
             </li>
           ))}
         </ul>
