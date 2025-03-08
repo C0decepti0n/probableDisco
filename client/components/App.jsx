@@ -49,6 +49,31 @@ function App() {
           html {
             cursor: url(${theme.cursor}), auto;
           }
+
+          .divTheme {
+            background: ${theme.secondaryColor};
+            borderColor: ${theme.tertiaryColor};
+            borderWidth: 5;
+            borderStyle: solid;
+            borderRadius: ${theme.borderRadius};
+          }
+
+          .spanTheme {
+            color: ${theme.primaryColor};
+            display: block;
+            fontFamily: ${theme.font};
+          }
+
+          .allInOneTheme {
+            background: ${theme.secondaryColor};
+            borderColor: ${theme.tertiaryColor};
+            borderWidth: 5;
+            borderStyle: solid;
+            borderRadius: ${theme.borderRadius};
+            color: ${theme.primaryColor};
+            display: block;
+            fontFamily: ${theme.font};
+          }
         `}
       </style>
       <div>
