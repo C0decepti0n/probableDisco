@@ -5,48 +5,56 @@ const { Library } = require('../database/index');
 
 const route = express.Router();
 
+
+// TODO : loads when Library component renders
 // handle GET requests for all playlists
-route.get('/playlists', (req, res) => {
-  // mongooose method to find
-  Library.find()
-.then((playlists)=>{
-  // id not playlist is found
-  if(!playlists){
-    // failure status
-    res.status(400).send("No playlist found!")
-  }
-  // successful status fetching playlits
-res.status(200).send("Success, found playlist!")
-})
-.catch((err)=>{
-console.error("Failure to find playlist:", err)in
-// internal service error
-res.sendStatus(500);
-})
-});
-
-
-
-
-
-// handle POST requests
-route.post('/playlists', (req, res) => {
-  const {playlist} = req.body
-// mongoose method to create
-  Library.create(playlist)
-.then(()=>{
-  //ok status for successful creation
-  res.sendStatus(201);
-})
+route.get('/', (req, res) => { 
+// mongooose method to find
+Library.find({})
+  .then((playlists)=>{
+    // id not playlist is found
+    if(!playlists){
+      // failure status
+      res.status(400).send("No playlist found!")
+    }
+    // successful status fetching playlits
+  res.status(200).send(playlists)
+  })
   .catch((err)=>{
-console.error("Failure to create playlist!:", err);
-// internal service error
-res.sendStatus(500);
-})
+  console.error("Failure to find playlist:", err)in
+  // internal service error
+  res.sendStatus(500);
+  })
 });
 
+
+//* Create new playlist 
+// TODO: decide trigger point(s)
+  //* Button at Advanced Search Results
+  //* Button at Library Component
+
+route.post('/', (req, res) => { 
+  const {playlist} = req.body
+  
+  // mongoose method to create
+  Library.create(playlist)
+    .then(()=>{
+      //ok status for successful creation
+      res.sendStatus(201);
+    })
+      .catch((err)=>{
+    console.error("Failure to create playlist!:", err);
+    // internal service error
+    res.sendStatus(500);
+    })
+});
+
+//* Update Playlist (add song)
+// TODO: decide button config at Search Component
+  //* Add to new playlist "Create and Add to new Playlist"
+  //* Button at Library Component
 // handle PATCH requests
-route.patch('/playlists/:id', (req, res) => {x
+route.patch('/', (req, res) => {x
   Library.findByIdAndUpdate(req.params, req.body)
 
 .then(()=>{
@@ -60,8 +68,9 @@ res.sendStatus(500);
 })
 });
 
+// TODO : connect to button in library
 // handle DELETE requests
-route.delete('/playlists/:id', (req, res) => { 
+route.delete('/', (req, res) => { 
   Library.findByIdAndDelete(req.params.id)
   .then(()=>{
       //ok success status for deletion

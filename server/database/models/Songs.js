@@ -5,7 +5,6 @@ const { Schema, model } = mongoose;
 const SongsSchema = new Schema(
   {
    'id': Number,
-   'readable': Boolean,
    'title': String,
    'link': String,
    'rank': Number,
@@ -15,6 +14,6 @@ const SongsSchema = new Schema(
   }
 );
 
-const Songs = model('Songs', SongsSchema);
+const Songs = model('Song', SongsSchema);
 
 module.exports = Songs;

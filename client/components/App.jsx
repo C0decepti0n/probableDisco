@@ -16,7 +16,13 @@ function App() {
   const [theme, setTheme] = useState(null);
   const [avatars, setAvatars] = useState([]);
   const [currentImage, setCurrentImage] = useState(
-    'https://img.freepik.com/premium-vector/cute-green-slime-monster-illustration_799627-169.jpg'
+    {
+      name: null,
+      idleImage: 'https://img.freepik.com/premium-vector/cute-green-slime-monster-illustration_799627-169.jpg',
+      activeImage: 'https://img.freepik.com/premium-vector/cute-green-slime-monster-illustration_799627-169.jpg',
+      userId: 0,
+    }
+    
   );
   
 

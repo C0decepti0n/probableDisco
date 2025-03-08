@@ -1,11 +1,10 @@
 const express = require('express');
 
-// import Queue db model
-const { Queue } = require('../database/index');
+// import Search db model
+const { Search } = require('../database/index');
 
 const route = express.Router();
 
-// TODO
 // handle GET requests
 route.get('/', (req, res) => {
 

@@ -45,7 +45,7 @@ module.exports = {
             path: path.resolve(__dirname, 'dist'),
             filename: 'index.html',
             template:'template.ejs',
-            favicon: path.resolve(__dirname, 'client/images/favicon.ico')
+            // favicon: path.resolve(__dirname, 'client/images/favicon.ico')
         }),
     ]
 

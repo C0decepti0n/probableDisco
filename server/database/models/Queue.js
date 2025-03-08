@@ -4,7 +4,7 @@ const { Schema, model } = mongoose;
 
 const QueueSchema = new Schema(
   {
-
+// TODO : this will basically become a listening history 
   }
 );
 

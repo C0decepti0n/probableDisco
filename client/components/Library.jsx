@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 const axios = require ('axios');
-const  Library = () =>{
+
+function Library () {
 
   const [songs, setSongs] = useState([]); 
   const [searchQuery, setSearchQuery] = useState(""); 
@@ -11,16 +12,25 @@ const  Library = () =>{
 };
 
 
+const getPlaylists = () => {
+  axios.get('/api/library')
+  .then(response => {
+    setSongs(response.data); 
+  })
+  .catch(error => {
+    console.error('Error fetching playlists:', error);
+  });
+};
 
-useEffect(() => {
-  axios.get('http://localhost:3000/library')
-    .then(response => {
-      setSongs(response.data); 
-    })
-    .catch(error => {
-      console.error('Error fetching songs:', error);
-    });
-}, []);
+// const getSongs = () => {
+//   axios.get('/api/songs')
+//     .then(response => {
+//       setSongs(response.data); 
+//     })
+//     .catch(error => {
+//       console.error('Error fetching songs:', error);
+//     });
+// };
 
 
 
