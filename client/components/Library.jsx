@@ -127,14 +127,24 @@ function Library() {
         </button>
       </form>
      
-      <ul>
+      <ul className='show-playlists'>
         {playlists.length > 0 ? (
           playlists.map((playlist) => (
             <li key={playlist._id}>
               <div onClick={() => toggleList(playlist._id)} style={{ cursor: 'pointer' }} > 
                 {playlist.name} 
               </div>
-              {expandedLists.includes(playlist._id) && <div>you're cool</div>}
+                {/** Playlist Toggle to show songs */}
+                {expandedLists.includes(playlist._id) && 
+                <div>
+                  <ul className="show-tracks"> 
+                  {playlist.tracks.data.map((track) => (
+                    <li key={track.id}>
+                      {track.title}
+                    </li>
+                  ))}
+                  </ul>
+                </div>}
               {editingPlaylistId === playlist._id ? (
                 <div>
                   <input
