@@ -1,48 +1,44 @@
 
-
-
-
-//useState -manage component state
-//useEffect- fetching data on mount
 import React, { useState, useEffect } from "react";
 import Search from "./Search.jsx";
 const axios = require("axios"); // handles HTTP request
 
-
-// deines Library component
 function Library() {
-  // holds playlist, updated playlist = empty array
+  // Load playlists updated playlist = empty array
   const [playlists, setPlaylists] = useState([]);
-
+  // Name new playlist
   const [playlistName, setPlaylistName] = useState("");
-//renaming playlist
-const [editingPlaylistId, setEditingPlaylistId] = useState(null); // To keep track of the playlist being renamed
-  //store new playlist names when creating one
+  // Rename
+  const [editingPlaylistId, setEditingPlaylistId] = useState(null); // To keep track of the playlist being renamed
+  // store new playlist names when creating one
+  const [newPlaylist, setNewPlaylist] = useState();
+  // Collapse or expand individual playlists to view songs
+  // const [expandedLists, setExpandedLists] = useState([]);
 
-  const [newPlaylist, setNewPlaylist] = useState(
-   // {
+  
+  // //fetch playlists when component mounts
+  // useEffect(() => {
+  //   getPlaylists();
+  // }, []);
 
-
-  //   name: "",
-  //   songs: [
-  //     {
-  //       trackId: 0,
-  //       title: "",
-  //       link: "",
-  //       preview: "",
-  //       artist: { name: "", id: 0 },
-  //       album: { title: "", id: 0 },
-  //     },
-  //   ],
+  //* Event Handlers * //
+  const handleInput = (e) => {
+    e.preventDefault(); // Prevent page reload
+    if (playlistName.trim() !== "") {
+      addPlaylist(playlistName); // Add playlist if name is provided
+    }
+  };
+  const handleRename = (playlistId, currentName) =>{
+    setEditingPlaylistId(playlistId)
+    setNewPlaylist(currentName)
+  }
+  // Expand playlist
+  // const toggleList = (index) => {
+  //   if (expandedLists.includes(index)) {
+  //     setExpandedLists(expandedLists.filter((i)))
+  //   }
   // }
-);
-//fetch playlists when component mounts
-useEffect(() => {
-  getPlaylists();
-}, []);
-
-
-//get request to 
+  //* Request Handling CRUD *//
   const getPlaylists = () => {
     axios
       .get("/library")
@@ -55,30 +51,6 @@ useEffect(() => {
         console.error("Error fetching playlists:", error);
       });
   };
-
-
-  const handleInput = (e) => {
-    e.preventDefault(); // Prevent page reload
-    if (playlistName.trim() !== "") {
-      addPlaylist(playlistName); // Add playlist if name is provided
-    }
-  };
-
-  const handlePlaylistClick = (playlistId) => {
-    console.log("Playlist clicked with ID:", playlistId);
-  }
-
-  
-  const handleDelete = (e) => {
-
-  };
-
-
-const handleRename = (playlistId, currentName) =>{
-  setEditingPlaylistId(playlistId)
-  setNewPlaylist(currentName)
-}
-
 
   const addPlaylist = (playlistName) => {
     axios
