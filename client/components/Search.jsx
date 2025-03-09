@@ -1,13 +1,9 @@
-import React, {
-  createContext,
-  useContext,
-  useActionState,
-  useState,
-  useEffect
-} from 'react';
+import React, { createContext, useContext, useActionState, useState, useEffect } from 'react';
+import Queue from './Queue.jsx';
+
 import axios from 'axios';
 // API Search & axios post
-function Search() {
+function Search({theme}) {
   // * Query Hooks * //
   const [artist, setArtist] = useState(''); // artist query
   const [song, setSong] = useState(''); // song query
@@ -24,9 +20,10 @@ function Search() {
     artist: { name: '', id: 0},
     album: { title: '', id: 0}
   });
+  const [oEmbedData, setOEmbedData] = useState({})
 
-  // Query Inputs
-  const handleInputChange = e => {
+  // Search Inputs
+  const handleInputChange = e => { 
     const { name, value } = e.target;
     if (name === 'artist') setArtist(value);
     if (name === 'song') setSong(value);
@@ -51,7 +48,6 @@ function Search() {
     //TODO : message for no results
     setError('');
     setResults([]);
-
     try {
       // Build the query string with user inputs
       const queryString = createQueryString();
@@ -78,8 +74,48 @@ function Search() {
     }
   };
 
-  // Handle Song Selection
+  // Add to Play
   const handleSelect = (result) => {
+    // Check if result type is a track
+    if (!result.type === 'track') console.error('unable to add this format');
+    // Format result to match selectedSong
+    const formattedSong = {
+      trackId: result.id,
+      title: result.title,
+      link: result.link,
+      preview: result.preview || '', // previews can be missing
+      artist: {
+        name: result.artist.name,
+        id: result.artist.id,
+      }, 
+      album: {
+        title: result.album.title,
+        id: result.album.id,
+      },
+    };
+    // Set State
+    // setSelectedSong(formattedSong);
+    // Init post request to server
+    addSong(formattedSong);
+  }
+
+  // Add song from search results to Songs Collection
+  const addSong = (selectedSong) => {
+    // songs endpoint and selectSong from state
+    axios.post('/songs', selectedSong )
+    // success handling
+    .then(() => {
+      // TODO : render client side success message
+      console.log(`${selectedSong.title} added to collection`);
+    })
+    // error handling
+    .catch((err) => {
+      console.error('Add song failed at client:', err);
+    });
+  };
+
+  //* Queue Requests
+  const handlePreview = (result) => {
     // Check if result type is a track
     if (!result.type === 'track') console.error('unable to add this format');
     // Format result to match selectedSong
@@ -98,33 +134,20 @@ function Search() {
       },
     };
     // Set State
-    setSelectedSong(formattedSong);
+    setOEmbedData(formattedSong);
     // Init post request to server
-    addSong(selectedSong)
+    previewSong(formattedSong)
   }
 
-  // Add song from search results to Songs Collection
-  const addSong = (selectedSong) => {
-    // songs endpoint and selectSong from state
-    axios.post('/songs', selectedSong )
-    // success handling
-    .then(() => {
-      // TODO : render client side success message
-      console.log(`${selectedSong.title} added to collection`);
-    })
-    // error handling
-    .catch((err) => {
-      console.error('Add song failed at client:', err);
-    });
-  };
+  const previewSong = (selectedSong) => {
 
+  };
   return (
-    <div style={{ paddingBottom: '200px' }} className='advanced-search'>
-      <h1 style={{ fontFamily: 'creepster' }}> Advanced Search </h1>
-      <div className='search-container'>
-        <h3>
-          Search for tracks by artist, song, or album—use any combination of
-          these options!
+    <div style={{background:theme.secondaryColor, borderColor:theme.tertiaryColor, borderWidth:5, borderStyle:'solid', borderRadius:theme.borderRadius, paddingBottom: '200px'}} className='advanced-search'>
+      <h1 style={{ fontFamily: 'creepster' }}> Search </h1>
+      <div style={{background:theme.secondaryColor, borderColor:theme.tertiaryColor, borderWidth:5, borderStyle:'solid', borderRadius:theme.borderRadius}} className='search-container'>
+        <h3 style={{color:theme.primaryColor, display:'block', fontFamily:theme.font, fontWeight:'bold'}}>
+          Search for tracks by artist, song, or album
         </h3>
         <form onSubmit={handleSubmit}>
           <div>
@@ -170,22 +193,28 @@ function Search() {
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </div>
 
-      <div className='results-container'>
+      <div style={{background:theme.secondaryColor, borderColor:theme.tertiaryColor, borderWidth:5, borderStyle:'solid', borderRadius:theme.borderRadius}} className='results-container'>
         <ul style={{ listStyleType: 'none' }}>
           {results.map((result, index) => (
             <li 
               key={index} 
-              className={`p-2 rounded ${
-                selectedSong === result ? "bg-blue-500 text-white" : "bg-gray-200"
+              className={`${
+                selectedSong === result ? "selection" : "not"
               }`}
             >
               <strong>{result.title}</strong> by {result.artist.name} from (
               {result.album.title})
               <button
-                className="ml-2 bg-gray-800 text-white px-3 py-1 rounded"
+                className="add-song"
                 onClick={() => handleSelect(result)}
               >
-                Add to songs
+                Add to Songs
+              </button>
+              <button
+                className="preview-song "
+                onClick={() => handlePreview(result)}
+              >
+                Preview Song
               </button>
              {/** <button>play now</button>  queue */}
             </li>
