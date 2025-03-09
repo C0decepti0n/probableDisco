@@ -127,7 +127,7 @@ function Library() {
         </button>
       </form>
      
-      <ul className='show-playlists'>
+      <ul className='show-playlists' style={{ listStyleType: "none" }}>
         {playlists.length > 0 ? (
           playlists.map((playlist) => (
             <li key={playlist._id}>
@@ -137,7 +137,7 @@ function Library() {
                 {/** Playlist Toggle to show songs */}
                 {expandedLists.includes(playlist._id) && 
                 <div>
-                  <ul className="show-tracks"> 
+                  <ul className="show-tracks" style={{ listStyleType: "none" }}> 
                   {playlist.tracks.data.map((track) => (
                     <li key={track.id}>
                       {track.title}
