@@ -86,10 +86,11 @@ function App() {
               setTheme={setTheme}
             />} />
             {/* Search */}
-            <Route path='/search' element={<Search />} />
+            <Route path='/search' element={<Search theme={theme}/>} />
             {/* Avatar */}
             <Route path='/avatar' element={
               <Avatar
+                theme={theme}
                 avatars={avatars}
                 setAvatars={setAvatars}
                 currentImage={currentImage}
@@ -97,11 +98,11 @@ function App() {
               />
             }/>
             {/* Library */}
-            <Route path='/library' element={<Library />} />
+            <Route path='/library' element={<Library theme={theme} />} />
             {/* Comments */}
-            <Route path='/comments' element={<Comments />} />
+            <Route path='/comments' element={<Comments theme={theme}/>} />
             {/* Queue */}
-            <Route path='/queue' element={<Queue />} />
+            <Route path='/queue' element={<Queue theme={theme} activeAvatar={currentImage?.activeImage}/>} />
           </Routes>
         </div>
       </div>
