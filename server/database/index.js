@@ -8,10 +8,11 @@ const Songs = require("./models/Songs");
 const Search = require("./models/Search");
 const Users = require("./models/Users");
 const Sessions = require("./models/Sessions");
+const { MONGO_URI } = require("../../config");
 
 // connect to mongo database
 mongoose
-  .connect("mongodb://localhost:27017/slimewire")
+  .connect(MONGO_URI)
   .then(() => {
     console.log("✔️ successful db connection");
   })
@@ -31,3 +32,5 @@ module.exports = {
   Users,
   Sessions
 };
+
+//mongodb://localhost:27017/slimewire
