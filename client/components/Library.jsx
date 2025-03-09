@@ -1,5 +1,5 @@
 
-function Library ({theme}) {
+
 
 
 //useState -manage component state
@@ -169,23 +169,7 @@ const handleRename = (playlistId, currentName) =>{
                 </div>
               ) : (
                 <div>
-                  <h3>
-                    
-                  <button
-                      style={{ background: "none", border: "none", color: "blue", cursor: "pointer" }}
-                      onClick={() => handlePlaylistClick(playlist._id)}
-                    >
-                    
-                    
-                    
-                    
                     {playlist.name}
-                    </button>
-                    
-                    
-                    </h3>
-
-                    
                   <button onClick={() => handleRename(playlist._id, playlist.name)}>
                     ✏ Rename
                   </button>
