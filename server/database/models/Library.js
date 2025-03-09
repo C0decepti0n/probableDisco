@@ -10,8 +10,12 @@ const LibrarySchema = new Schema(
       'tracks': {
           'data': [
                   {
-                  'id': Number,
-                  'title': String
+                  'trackId': Number,
+          'title': String,
+          'link': String,
+          'preview': String,
+          'artist': { 'name': String, 'id': Number},
+          'album': { 'title': String, 'id': Number },
                   }
               ]
           }
