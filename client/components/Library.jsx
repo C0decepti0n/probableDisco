@@ -13,13 +13,14 @@ function Library() {
   // store new playlist names when creating one
   const [newPlaylist, setNewPlaylist] = useState();
   // Collapse or expand individual playlists to view songs
-  // const [expandedLists, setExpandedLists] = useState([]);
+  const [expandedLists, setExpandedLists] = useState([]);
 
   
-  // //fetch playlists when component mounts
-  // useEffect(() => {
-  //   getPlaylists();
-  // }, []);
+  // Fetch playlists when component mounts
+  useEffect(() => {
+    getPlaylists();
+    
+  }, []);
 
   //* Event Handlers * //
   const handleInput = (e) => {
@@ -32,19 +33,23 @@ function Library() {
     setEditingPlaylistId(playlistId)
     setNewPlaylist(currentName)
   }
+
   // Expand playlist
-  // const toggleList = (index) => {
-  //   if (expandedLists.includes(index)) {
-  //     setExpandedLists(expandedLists.filter((i)))
-  //   }
-  // }
+  const toggleList = (index) => {
+    if (expandedLists.includes(index)) {
+      setExpandedLists(expandedLists.filter((i) => i !== index));
+    } else {
+      setExpandedLists([...expandedLists, index]);
+    }
+  };
+
   //* Request Handling CRUD *//
   const getPlaylists = () => {
     axios
       .get("/library")
       .then((response) => {
-        console.log("Fetched playlists:", response.data); // Log the response data
-
+        // console.log(response.data[0].tracks.data);
+        // console.log("Fetched playlists:", response.data); // Log the response data
         setPlaylists(response.data);
       })
       .catch((error) => {
@@ -126,6 +131,10 @@ function Library() {
         {playlists.length > 0 ? (
           playlists.map((playlist) => (
             <li key={playlist._id}>
+              <div onClick={() => toggleList(playlist._id)} style={{ cursor: 'pointer' }} > 
+                {playlist.name} 
+              </div>
+              {expandedLists.includes(playlist._id) && <div>you're cool</div>}
               {editingPlaylistId === playlist._id ? (
                 <div>
                   <input
@@ -141,7 +150,7 @@ function Library() {
                 </div>
               ) : (
                 <div>
-                    {playlist.name}
+                 
                   <button onClick={() => handleRename(playlist._id, playlist.name)}>
                     ✏ Rename
                   </button>
