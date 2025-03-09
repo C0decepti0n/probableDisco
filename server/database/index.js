@@ -8,7 +8,6 @@ const Songs = require("./models/Songs");
 const Search = require("./models/Search");
 const Users = require("./models/Users");
 const Sessions = require("./models/Sessions");
-// const { MONGO_URI } = require("../../config");
 
 // connect to mongo database
 mongoose
@@ -32,5 +31,3 @@ module.exports = {
   Users,
   Sessions
 };
-
-//mongodb://localhost:27017/slimewire
