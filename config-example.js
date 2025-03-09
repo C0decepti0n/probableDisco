@@ -2,6 +2,6 @@
 module.exports = {
   GOOGLE_CLIENT_ID: 'change me',
   GOOGLE_CLIENT_SECRET: 'change me',
-  MONGO_URI: 'change me'
+ 
 }
 
