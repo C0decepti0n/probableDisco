@@ -5,26 +5,37 @@ const { Schema, model } = mongoose;
 // Represents an instance of a Playlist
 const LibrarySchema = new Schema(
   {
-    // userId: { type: Schema.Types.ObjectId, ref: 'User', required: true }, // Owner of the library
-    name: String,
-    // TODO : decide if all song data is stored in a playlist or just the corresponding id
-    songs: [
-      {
-        name: String,
-        description: String,
-        tracks: [
-          {
-            trackId: Number,
-            title: String,
-            artist: String, 
-            album: String, 
-            duration: Number,
+  
+  'name': String,
+      'tracks': {
+          'data': [
+                  {
+                  'id': Number,
+                  'title': String
+                  }
+              ]
           }
-        ],
-      }
-    ],
-  },
-  { timestamps: true }
+        } 
+
+
+
+
+  
+    // userId: { type: Schema.Types.ObjectId, ref: 'User', required: true }, // Owner of the library
+  //   name: String,
+  //   // TODO : decide if all song data is stored in a playlist or just the corresponding id
+  //   songs: [
+  //     {
+  //   'trackId': Number,
+  //  'title': String,
+  //  'link': String,
+  //  'preview': String,
+  //  'artist': { 'name': String, 'id': Number },
+  //  'album': { 'title': String, 'id': Number }, 
+  //     }
+  //   ],
+  // },
+  // { timestamps: true }
 );
 
 const Library = model('Library', LibrarySchema);
