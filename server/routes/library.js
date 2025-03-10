@@ -16,6 +16,7 @@ Library.find({})
       // failure status
       res.status(400).send("No playlist found!")
     }
+    console.log(playlists)
     // successful status fetching playlits
     res.status(200).send(playlists)
   })
@@ -33,9 +34,8 @@ Library.find({})
   //* Button at Library Component
 
 route.post('/', (req, res) => { 
-  const {playlist} = req.body
   // mongoose method to create
-  Library.create(playlist)
+  Library.create(req.body)
     .then(()=>{
       //ok status for successful creation
       res.sendStatus(201);
@@ -49,9 +49,13 @@ route.post('/', (req, res) => {
 
 //* Update Playlist (add song)
 // TODO: decide trigger point location (Library Component and/or Advanced Search)
-route.patch('/', (req, res) => {x
-  Library.findByIdAndUpdate(req.params, req.body)
-  .then(()=>{
+route.patch('/:id', (req, res) => {
+  Library.findByIdAndUpdate(req.params.id, req.body)
+  .then((updatedPlaylist)=>{
+
+    if (!updatedPlaylist) {
+      return res.status(404).send("Playlist not found");
+    }
     //ok sucess status for update
     res.status(200).send("Update was successful!")
   })
@@ -64,7 +68,7 @@ route.patch('/', (req, res) => {x
 
 // * Delete Playlist
 // TODO : trigger with button in Library Component
-route.delete('/', (req, res) => { 
+route.delete('/:id', (req, res) => { 
   Library.findByIdAndDelete(req.params.id)
   .then(()=>{
     //ok success status for deletion

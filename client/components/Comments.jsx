@@ -1,5 +1,17 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+=======
+//omport react and hooks needed for state and lifecycle
+import React, { useState, useEffect } from 'react';
+//import axios to make HTTP requests
+import axios from 'axios';
+
+//create the Comments component
+const Comments = ({ songId, theme }) => {
+
+  //stateto hold the list of comments from the server
+>>>>>>> 1e9e11c9bd3cc8aa1540782dfb37a1b7a3062615
 
 const Comments = ({ trackId }) => {
   const [comments, setComments] = useState([]);
