@@ -206,8 +206,14 @@ function Search({theme}) {
       }
     const newTracks = playlistToUpdate.tracks;
     newTracks.data.push(formattedSong);
-    console.log(playlistToUpdate.tracks.data);
-    // console.log(formattedSong); 
+    
+    axios.patch(`/library/${currentPlaylist}`, {tracks: newTracks})
+      .then(() => {
+        console.log(`${formattedSong.title} added to ${playlistToUpdate}`);
+      })
+      .catch((err) => {
+        console.error(`adding ${formattedSong.title} failed at client`, err);
+      });
   };
   
   return (
