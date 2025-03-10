@@ -74,11 +74,11 @@ function Library() {
   // Rename Playlist
 
   const updatePlaylist = (playlistId, newName) => {
-    // setPlaylists((prevPlaylists) =>
-    //   prevPlaylists.map((playlist) =>
-    //     playlist._id === playlistId ? { ...playlist, name: newName } : playlist
-    //   ) //* maybe don't need this
-    // );
+    setPlaylists((prevPlaylists) =>
+      prevPlaylists.map((playlist) =>
+        playlist._id === playlistId ? { ...playlist, name: newName } : playlist
+      ) 
+    );
     axios
       .patch(`/library/${playlistId}`, {name:newName})
       .then(() => {
