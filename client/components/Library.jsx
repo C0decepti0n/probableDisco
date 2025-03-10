@@ -19,7 +19,6 @@ function Library() {
   // Fetch playlists when component mounts
   useEffect(() => {
     getPlaylists();
-    
   }, []);
 
   //* Event Handlers * //
@@ -72,13 +71,14 @@ function Library() {
         console.error("Error adding playlist", err);
       });
   };
+  // Rename Playlist
 
   const updatePlaylist = (playlistId, newName) => {
-    setPlaylists((prevPlaylists) =>
-      prevPlaylists.map((playlist) =>
-        playlist._id === playlistId ? { ...playlist, name: newName } : playlist
-      )
-    );
+    // setPlaylists((prevPlaylists) =>
+    //   prevPlaylists.map((playlist) =>
+    //     playlist._id === playlistId ? { ...playlist, name: newName } : playlist
+    //   ) //* maybe don't need this
+    // );
     axios
       .patch(`/library/${playlistId}`, {name:newName})
       .then(() => {
@@ -103,6 +103,29 @@ function Library() {
       });
   };
   
+  // Delete Track from playlist
+  const deleteTrack = (playlist, track, index) => {
+    // init newTracks to hold tracks w/o selected track
+    const newTracks = playlist.tracks;
+    // splice selected track from newTracks
+    newTracks.data.splice(index, 1);
+    // init playlistId for clarity in following code
+    const playlistId = playlist._id;
+    // set playLists so updated track list renders immediately
+    setPlaylists((prev) => 
+      prev.map((playlist) => 
+      playlist._id === playlistId ? {...playlist, tracks: newTracks} : playlist)
+    );
+    // Server Request
+    axios.patch(`/library/${playlistId}`, {tracks: newTracks})
+    .then(() => {
+      console.log(`${track.title} deleted from ${playlist}`);
+    })
+    .catch((err) => {
+      console.error(`remove ${track.title} failed at client`, err);
+    });
+  };
+
   return (
     <div
       className="library-playlist"
@@ -138,9 +161,14 @@ function Library() {
                 {expandedLists.includes(playlist._id) && 
                 <div>
                   <ul className="show-tracks" style={{ listStyleType: "none" }}> 
-                  {playlist.tracks.data.map((track) => (
-                    <li key={track.id}>
+                  {playlist.tracks.data.map((track, index) => (
+                    <li key={index}>
                       {track.title}
+                      <div>
+                      <button onClick={() => deleteTrack(playlist, track, index)}>
+                    🗑 Delete
+                  </button>
+                      </div>
                     </li>
                   ))}
                   </ul>

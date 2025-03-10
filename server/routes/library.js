@@ -1,12 +1,10 @@
 const express = require('express');
-//const cors = require('cors')
-// import Library db model
+
 const { Library } = require('../database/index');
 
 const route = express.Router();
 
 // * Load User Playlists when Library Component renders
-// TODO : setState in Library.jsx
 route.get('/', (req, res) => { 
 // mongooose method to find
 Library.find({})
@@ -27,12 +25,7 @@ Library.find({})
   })
 });
 
-
 //* Create new playlist 
-// TODO: decide trigger point(s)
-  //* Button at Advanced Search Results
-  //* Button at Library Component
-
 route.post('/', (req, res) => { 
   // mongoose method to create
   Library.create(req.body)
@@ -47,14 +40,13 @@ route.post('/', (req, res) => {
     })
 });
 
-//* Update Playlist (add song)
-// TODO: decide trigger point location (Library Component and/or Advanced Search)
+//* Update Playlist (rename or delete track)
 route.patch('/:id', (req, res) => {
   Library.findByIdAndUpdate(req.params.id, req.body)
   .then((updatedPlaylist)=>{
 
     if (!updatedPlaylist) {
-      return res.status(404).send("Playlist not found");
+      return res.status(404).send("Playlist not found in library");
     }
     //ok sucess status for update
     res.status(200).send("Update was successful!")
@@ -67,7 +59,6 @@ route.patch('/:id', (req, res) => {
 });
 
 // * Delete Playlist
-// TODO : trigger with button in Library Component
 route.delete('/:id', (req, res) => { 
   Library.findByIdAndDelete(req.params.id)
   .then(()=>{
