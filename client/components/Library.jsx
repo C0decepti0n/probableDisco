@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Search from "./Search.jsx";
 const axios = require("axios"); // handles HTTP request
 
-function Library() {
+function Library({theme}) {
   // Load playlists updated playlist = empty array
   const [playlists, setPlaylists] = useState([]);
   // Name new playlist
@@ -129,7 +129,7 @@ function Library() {
   return (
     <div
       className="library-playlist"
-      style={{
+      style={{background:theme.secondaryColor, borderColor:theme.tertiaryColor, borderStyle:'solid', borderRadius:theme.borderRadius,
         border: "2px solid black",
         padding: "10px",
         borderRadius: "8px",

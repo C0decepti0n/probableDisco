@@ -55,10 +55,10 @@ function App() {
         <img src={Logo} alt='App Logo' style={{ height: 115, width: 500 }} />
         {/* Nav Links */}
         <nav className='nav'>
-          <ul>
+          <ul style={{ listStyleType: 'none' }}>
             <li><Link to='/home'>Home</Link></li>
             <li><Link to='/settings'>Settings</Link></li>
-            <li><Link to='/search'>Advanced Search</Link></li>
+            <li><Link to='/search'>Search</Link></li>
             <li><Link to='/avatar'>Avatar</Link></li>
             <li><Link to='/library'>Library</Link></li>
             <li><Link to='/comments'>Comments</Link></li>
