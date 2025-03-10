@@ -51,7 +51,7 @@ function App() {
           }
         `}
       </style>
-      <div style={{background:theme.secondaryColor, borderColor:theme.tertiaryColor, borderWidth:5, borderStyle:'solid', borderRadius:theme.borderRadius}}>
+      <div style={{background:theme.secondaryColor, borderColor:theme.tertiaryColor, borderWidth:5, borderStyle:'solid', borderRadius:theme.borderRadius, color:theme.primaryColor, fontFamily:theme.font}}>
         <img src={Logo} alt='App Logo' style={{ height: 115, width: 500, display: 'block', marigin: '0 auto', alignItems:'center'}} />
         {/* Nav Links */}
         <nav className='nav'>
