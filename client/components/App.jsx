@@ -33,9 +33,7 @@ function App() {
       activeImage: 'https://img.freepik.com/premium-vector/cute-green-slime-monster-illustration_799627-169.jpg',
       userId: 0,
     }
-    
   );
-  
 
   const handleLogout = () => {
     // Send GET req to server logout route

@@ -282,12 +282,6 @@ function Search({theme}) {
                 Add to Songs
               </button>
               <button
-                className="preview-song "
-                onClick={() => handlePreview(result)}
-              >
-                Preview Song
-              </button>
-              <button
                 className="add-to-playlist "
                 onClick={() => setShowDropdown(true)}
               >
