@@ -1,17 +1,22 @@
 import React, { createContext, useContext, useActionState, useState, useEffect } from 'react';
 import Queue from './Queue.jsx';
 
+
 import axios from 'axios';
 // API Search & axios post
 function Search({theme}) {
-  // * Query Hooks * //
+  // * Query States * //
   const [artist, setArtist] = useState(''); // artist query
   const [song, setSong] = useState(''); // song query
   const [album, setAlbum] = useState(''); // album query
   const [results, setResults] = useState([]); // API results
   const [loading, setLoading] = useState(false); // loading state
   const [error, setError] = useState(''); // error handling
-  //* selectedSong = songModel */
+  const [oEmbedData, setOEmbedData] = useState({}) // TODO maybe delete
+  const [showDropdown, setShowDropdown] = useState(false) // Show Playlists
+  const [playlists, setPlaylists] = useState([]); // All playlists
+  const [currentPlaylist, setCurrentPlaylist] = useState({});  // Current Playlists
+  // Song Model
   const [selectedSong, setSelectedSong] = useState({
     trackId: 0,
     title: '',
@@ -20,8 +25,26 @@ function Search({theme}) {
     artist: { name: '', id: 0},
     album: { title: '', id: 0}
   });
-  const [oEmbedData, setOEmbedData] = useState({})
-
+  // Playlist Model
+  const [playlistAdd, setPlaylistAdd] = useState({
+    name: '',
+    tracks: {
+      data: [
+          {
+          trackId: 0,
+          title: '',
+          link: '',
+          preview: '',
+          artist: { name: '', id: 0},
+          album: { title: '', id: 0 },
+          }
+        ]
+    }
+  });
+  useEffect(() => {
+    getPlaylists();
+  }, []);
+  //* Event Handlers : Search Queries *//
   // Search Inputs
   const handleInputChange = e => { 
     const { name, value } = e.target;
@@ -39,7 +62,8 @@ function Search({theme}) {
     return query;
   };
 
-  // Deezer API call
+  //* Deezer API Request *//
+  // Search Deezer
   const handleSubmit = async e => {
     // prevents function from running on page render
     e.preventDefault();
@@ -73,8 +97,36 @@ function Search({theme}) {
       setLoading(false);
     }
   };
+ // oEmbed Preview
+  const handlePreview = (result) => {
+    // Check if result type is a track
+    if (!result.type === 'track') console.error('unable to add this format');
+    // Format result to match selectedSong
+    const formattedSong = {
+      trackId: result.id,
+      title: result.title,
+      link: result.link,
+      preview: result.preview || '', // previews can be missing
+      artist: {
+        name: result.artist.name,
+        id: result.artist.id,
+      },
+      album: {
+        title: result.album.title,
+        id: result.album.id,
+      },
+    };
+    // Set State
+    setOEmbedData(formattedSong);
+    // Init post request to server
+    previewSong(formattedSong)
+  }
+  // oEmbed Preview 
+  const previewSong = (selectedSong) => {
+  };
 
-  // Add to Play
+  //* Event Handlers : Song Actions
+  // Format Selected Song
   const handleSelect = (result) => {
     // Check if result type is a track
     if (!result.type === 'track') console.error('unable to add this format');
@@ -99,7 +151,21 @@ function Search({theme}) {
     addSong(formattedSong);
   }
 
-  // Add song from search results to Songs Collection
+  // * Server Requests *// 
+  // get playlists
+  const getPlaylists = () => {
+    axios
+      .get("/library")
+      .then((response) => {
+        // console.log(response.data[0].tracks.data);
+        // console.log("Fetched playlists:", response.data); // Log the response data
+        setPlaylists(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching playlists:", error);
+      });
+  };
+  //Add song from search results to Songs Collection
   const addSong = (selectedSong) => {
     // songs endpoint and selectSong from state
     axios.post('/songs', selectedSong )
@@ -114,41 +180,47 @@ function Search({theme}) {
     });
   };
 
-  //* Queue Requests
-  const handlePreview = (result) => {
-    // Check if result type is a track
-    if (!result.type === 'track') console.error('unable to add this format');
-    // Format result to match selectedSong
+  // Add song from search results to Playlist
+  const addToPlaylist = () => {
+    
+    // Format selectio
     const formattedSong = {
-      trackId: result.id,
-      title: result.title,
-      link: result.link,
-      preview: result.preview || '', // previews can be missing
+      trackId: selectedSong.id,
+      title: selectedSong.title,
+      link: selectedSong.link,
+      preview: selectedSong.preview || '', // previews can be missing
       artist: {
-        name: result.artist.name,
-        id: result.artist.id,
-      },
+        name: selectedSong.artist.name,
+        id: selectedSong.artist.id,
+      }, 
       album: {
-        title: result.album.title,
-        id: result.album.id,
+        title: selectedSong.album.title,
+        id: selectedSong.album.id,
       },
     };
-    // Set State
-    setOEmbedData(formattedSong);
-    // Init post request to server
-    previewSong(formattedSong)
-  }
-
-  const previewSong = (selectedSong) => {
-
+   
+    const playlistToUpdate = playlists.find((p) => p._id === currentPlaylist);
+      if (!playlistToUpdate) {
+        console.error('Playlist not found');
+        return;
+      }
+    const newTracks = playlistToUpdate.tracks;
+    newTracks.data.push(formattedSong);
+    
+    axios.patch(`/library/${currentPlaylist}`, {tracks: newTracks})
+      .then(() => {
+        console.log(`${formattedSong.title} added to ${playlistToUpdate}`);
+      })
+      .catch((err) => {
+        console.error(`adding ${formattedSong.title} failed at client`, err);
+      });
   };
+  
   return (
-    <div style={{background:theme.secondaryColor, borderColor:theme.tertiaryColor, borderWidth:5, borderStyle:'solid', borderRadius:theme.borderRadius, paddingBottom: '200px'}} className='advanced-search'>
+    
+    <div style={{background:theme.secondaryColor, borderColor:theme.tertiaryColor, borderWidth:5, borderStyle:'solid', borderRadius:theme.borderRadius, paddingBottom: '20px'}} className='advanced-search'>
       <h1 style={{ fontFamily: 'creepster' }}> Search </h1>
-      <div style={{background:theme.secondaryColor, borderColor:theme.tertiaryColor, borderWidth:5, borderStyle:'solid', borderRadius:theme.borderRadius}} className='search-container'>
-        <h3 style={{color:theme.primaryColor, display:'block', fontFamily:theme.font, fontWeight:'bold'}}>
-          Search for tracks by artist, song, or album
-        </h3>
+      <div className='search-container' style={{color:theme.primaryColor, display:'block', fontFamily:theme.font, fontWeight:'bold'}}>
         <form onSubmit={handleSubmit}>
           <div>
             <label htmlFor='artist'>Artist</label>
@@ -188,7 +260,6 @@ function Search({theme}) {
             🔎
           </button>
         </form>
-
         {loading && <p>Loading...</p>}
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </div>
@@ -216,7 +287,26 @@ function Search({theme}) {
               >
                 Preview Song
               </button>
-             {/** <button>play now</button>  queue */}
+              <button
+                className="add-to-playlist "
+                onClick={() => setShowDropdown(true)}
+              >
+                Add to Playlist
+              </button>
+              {/* Dropdown for selecting playlist */}
+              {showDropdown && (
+                <div>
+                  <select onChange={(e) => {setCurrentPlaylist(e.target.value);setSelectedSong(result)}}>
+                    <option value="" disabled selected>Select a Playlist</option>
+                    {playlists.map((playlist) => (
+                      <option key={playlist._id} value={playlist._id}>
+                        {playlist.name}
+                      </option>
+                    ))}
+                  </select>
+                  <button onClick={addToPlaylist}>Confirm Add</button> 
+                </div>
+              )}
             </li>
           ))}
         </ul>
@@ -226,3 +316,4 @@ function Search({theme}) {
   );
 }
 export default Search;
+
