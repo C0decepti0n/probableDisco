@@ -46,10 +46,11 @@ function App() {
         {`
           html {
             cursor: url(${theme.cursor}), auto;
+            background: ${theme.secondaryColor};
           }
         `}
       </style>
-      <div>
+      <div style={{background:theme.secondaryColor, borderColor:theme.tertiaryColor, borderWidth:5, borderStyle:'solid', borderRadius:theme.borderRadius, color:theme.primaryColor, fontFamily:theme.font}}>
         <img src={Logo} alt='App Logo' style={{ height: 115, width: 500 }} />
         {/* Nav Links */}
         <nav className='nav'>
@@ -74,7 +75,7 @@ function App() {
             <Route path='/home' element={
               <div>
                 <h1 style={{ fontFamily: 'creepster' }}>Get Slimed</h1>
-                <img src={currentImage} style={{ width: '50%', height: 'auto' }} />
+                <img src={currentImage.activeImage} style={{ width: '50%', height: 'auto' }} />
               </div>
             }/>
 
