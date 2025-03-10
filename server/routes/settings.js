@@ -41,8 +41,20 @@ route.get('/', (req, res) => {
 
 // handle POST requests
 route.post('/', (req, res) => {
+  // replace empty fields with default values (not necessary but cleans things up a little)
+  // create an empty array that will eventually be used to add a new theme to the db
+  const valuesToAdd = {};
+  // loop through the req.body object
+  for (let key in req.body) {
+    // for each key/value pair in req.body, give valuesToAdd a copy of the same key/value pair as long as the value isn't an empty string
+    if (req.body[key] !== '') {
+      valuesToAdd[key] = req.body[key];
+    } else { // if the value is an empty string, then give the current key the default value from defaultRef
+      valuesToAdd[key] = defaultRef[key];
+    }
+  }
   // insert new setting (theme) into the database
-  Settings.create(req.body)
+  Settings.create(valuesToAdd)
     .then(() => {
       // send status of 201 upon successful creation of the new theme in the settings database
       res.sendStatus(201);

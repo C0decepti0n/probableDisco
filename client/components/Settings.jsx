@@ -123,7 +123,7 @@ function Settings({ themes, setThemes, theme, setTheme}) {
           })
         }
       </select>
-      <button onClick={deleteTheme}>Delete Theme</button>
+      <button onClick={deleteTheme}>🗑️Delete Theme</button>
       {/* forms can be filled out with info that is saved in state and then is used for either POST requests or Patch requests */}
       <div style={{background:theme.secondaryColor, borderColor:theme.tertiaryColor, borderWidth:5, borderStyle:'solid', borderRadius:theme.borderRadius}}>
         <div style={{background:theme.secondaryColor, borderColor:theme.tertiaryColor, borderWidth:5, borderStyle:'solid', borderRadius:theme.borderRadius}}>
@@ -143,8 +143,8 @@ function Settings({ themes, setThemes, theme, setTheme}) {
           <input style={{width:'90%'}} onChange={e => updateFormValues('borderRadius', e.target.value)} placeholder='insert number (of pixels) you want to round the corners of boxes by' type='number'></input>
         </div>
         <span style={{color:theme.primaryColor, display:'block', fontFamily:theme.font}}>Using these forms, you can:</span>
-        <button onClick={addTheme}>Add Theme</button>
-        <button onClick={updateTheme}>Update Current Theme <span style={{color:'dimgrey'}}>empty fields are ignored</span></button>
+        <button onClick={addTheme}>➕Add Theme</button>
+        <button onClick={updateTheme}>🔄Update Current Theme <span style={{color:'dimgrey'}}>empty fields are ignored</span></button>
       </div>
     </div>
   )
