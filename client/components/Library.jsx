@@ -1,84 +1,59 @@
-
-
-
-
-//useState -manage component state
-//useEffect- fetching data on mount
 import React, { useState, useEffect } from "react";
 import Search from "./Search.jsx";
 const axios = require("axios"); // handles HTTP request
 
-
-// deines Library component
-function Library() {
-  // holds playlist, updated playlist = empty array
+function Library({theme}) {
+  // Load playlists updated playlist = empty array
   const [playlists, setPlaylists] = useState([]);
-
+  // Name new playlist
   const [playlistName, setPlaylistName] = useState("");
-//renaming playlist
-const [editingPlaylistId, setEditingPlaylistId] = useState(null); // To keep track of the playlist being renamed
-  //store new playlist names when creating one
+  // Rename
+  const [editingPlaylistId, setEditingPlaylistId] = useState(null); // To keep track of the playlist being renamed
+  // store new playlist names when creating one
+  const [newPlaylist, setNewPlaylist] = useState();
+  // Collapse or expand individual playlists to view songs
+  const [expandedLists, setExpandedLists] = useState([]);
 
-  const [newPlaylist, setNewPlaylist] = useState(
-   // {
+  
+  // Fetch playlists when component mounts
+  useEffect(() => {
+    getPlaylists();
+  }, []);
 
-
-  //   name: "",
-  //   songs: [
-  //     {
-  //       trackId: 0,
-  //       title: "",
-  //       link: "",
-  //       preview: "",
-  //       artist: { name: "", id: 0 },
-  //       album: { title: "", id: 0 },
-  //     },
-  //   ],
-  // }
-);
-//fetch playlists when component mounts
-useEffect(() => {
-  getPlaylists();
-}, []);
-
-
-//get request to 
-  const getPlaylists = () => {
-    axios
-      .get("/library")
-      .then((response) => {
-        console.log("Fetched playlists:", response.data); // Log the response data
-
-        setPlaylists(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching playlists:", error);
-      });
-  };
-
-
+  //* Event Handlers * //
   const handleInput = (e) => {
     e.preventDefault(); // Prevent page reload
     if (playlistName.trim() !== "") {
       addPlaylist(playlistName); // Add playlist if name is provided
     }
   };
-
-  const handlePlaylistClick = (playlistId) => {
-    console.log("Playlist clicked with ID:", playlistId);
+  const handleRename = (playlistId, currentName) =>{
+    setEditingPlaylistId(playlistId)
+    setNewPlaylist(currentName)
   }
 
-  
-  const handleDelete = (e) => {
-
+  // Expand playlist
+  const toggleList = (index) => {
+    if (expandedLists.includes(index)) {
+      setExpandedLists(expandedLists.filter((i) => i !== index));
+    } else {
+      setExpandedLists([...expandedLists, index]);
+    }
   };
 
-
-const handleRename = (playlistId, currentName) =>{
-  setEditingPlaylistId(playlistId)
-  setNewPlaylist(currentName)
-}
-
+  //* Request Handling CRUD *//
+  const getPlaylists = () => {
+    axios
+      .get("/library")
+      .then((response) => {
+        // console.log(response.data[0].tracks.data);
+        // console.log("Fetched playlists:", response.data); // Log the response data
+        setPlaylists(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching playlists:", error);
+      });
+  };
 
   const addPlaylist = (playlistName) => {
     axios
@@ -95,12 +70,13 @@ const handleRename = (playlistId, currentName) =>{
         console.error("Error adding playlist", err);
       });
   };
+  // Rename Playlist
 
   const updatePlaylist = (playlistId, newName) => {
     setPlaylists((prevPlaylists) =>
       prevPlaylists.map((playlist) =>
         playlist._id === playlistId ? { ...playlist, name: newName } : playlist
-      )
+      ) 
     );
     axios
       .patch(`/library/${playlistId}`, {name:newName})
@@ -126,10 +102,33 @@ const handleRename = (playlistId, currentName) =>{
       });
   };
   
+  // Delete Track from playlist
+  const deleteTrack = (playlist, track, index) => {
+    // init newTracks to hold tracks w/o selected track
+    const newTracks = playlist.tracks;
+    // splice selected track from newTracks
+    newTracks.data.splice(index, 1);
+    // init playlistId for clarity in following code
+    const playlistId = playlist._id;
+    // set playLists so updated track list renders immediately
+    setPlaylists((prev) => 
+      prev.map((playlist) => 
+      playlist._id === playlistId ? {...playlist, tracks: newTracks} : playlist)
+    );
+    // Server Request
+    axios.patch(`/library/${playlistId}`, {tracks: newTracks})
+    .then(() => {
+      console.log(`${track.title} deleted from ${playlist}`);
+    })
+    .catch((err) => {
+      console.error(`remove ${track.title} failed at client`, err);
+    });
+  };
+
   return (
     <div
       className="library-playlist"
-      style={{
+      style={{background:theme.secondaryColor, borderColor:theme.tertiaryColor, borderStyle:'solid', borderRadius:theme.borderRadius,
         border: "2px solid black",
         padding: "10px",
         borderRadius: "8px",
@@ -150,10 +149,29 @@ const handleRename = (playlistId, currentName) =>{
         </button>
       </form>
      
-      <ul>
+      <ul className='show-playlists' style={{ listStyleType: "none" }}>
         {playlists.length > 0 ? (
           playlists.map((playlist) => (
             <li key={playlist._id}>
+              <div onClick={() => toggleList(playlist._id)} style={{ cursor: 'pointer' }} > 
+                {playlist.name} 
+              </div>
+                {/** Playlist Toggle to show songs */}
+                {expandedLists.includes(playlist._id) && 
+                <div>
+                  <ul className="show-tracks" style={{ listStyleType: "none" }}> 
+                  {playlist.tracks.data.map((track, index) => (
+                    <li key={index}>
+                      {track.title}
+                      <div>
+                      <button onClick={() => deleteTrack(playlist, track, index)}>
+                    🗑 Delete
+                  </button>
+                      </div>
+                    </li>
+                  ))}
+                  </ul>
+                </div>}
               {editingPlaylistId === playlist._id ? (
                 <div>
                   <input
@@ -169,23 +187,7 @@ const handleRename = (playlistId, currentName) =>{
                 </div>
               ) : (
                 <div>
-                  <h3>
-                    
-                  <button
-                      style={{ background: "none", border: "none", color: "blue", cursor: "pointer" }}
-                      onClick={() => handlePlaylistClick(playlist._id)}
-                    >
-                    
-                    
-                    
-                    
-                    {playlist.name}
-                    </button>
-                    
-                    
-                    </h3>
-
-                    
+                 
                   <button onClick={() => handleRename(playlist._id, playlist.name)}>
                     ✏ Rename
                   </button>

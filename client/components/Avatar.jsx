@@ -97,7 +97,7 @@ function Avatar(props) {
   // }
 
   return (
-    <div>
+    <div style={{background:props.theme.secondaryColor, borderColor:props.theme.tertiaryColor, borderWidth:5, borderStyle:'solid', borderRadius:props.theme.borderRadius, color:props.theme.primaryColor, fontFamily:props.theme.font}}>
       <span>idleImage</span>
       <img
         src={props.currentImage.idleImage}
@@ -155,12 +155,15 @@ function Avatar(props) {
           }
           placeholder="Active Image Link"
         />
+       
       </div>
-
+          
       <button onClick={addAvatar}>Add</button>
       <button onClick={modAvatar}>Modify Current Avatar</button>
     </div>
   );
 }
 
+        
+        
 export default Avatar;
