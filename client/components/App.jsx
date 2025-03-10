@@ -76,7 +76,7 @@ function App() {
             <Route path='/home' element={
               <div>
                 <h1 style={{ fontFamily: 'creepster' }}>Get Slimed</h1>
-                <img src={Slime} style={{ width: '50%', height: 'auto' }} />
+                <img src={currentImage.activeImage} style={{ width: '50%', height: 'auto' }} />
               </div>
             }/>
 
