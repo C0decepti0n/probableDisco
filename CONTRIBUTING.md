@@ -10,4 +10,6 @@ Task 1.4 - create helper files like auth.js and config.js as the need for them a
 
 Task 2.0 - fill out the created folders and files with the required info (create a react app in the client folder, create an express server with request handling in the server folder, and create a mongoose/mongo database connection with models within server/database)
 
+Task 2.1 - ensure that React, Mongodb, and Express all have something that handles avatars, comments, the library, the queue, searching, sessions, settings, songs, and users (some subjects may not be required to have their own file for React, Mongod, and/or Express [for example, users doesn't utilize a React jsx file])
+
 Task 3.0 - Polish everything
