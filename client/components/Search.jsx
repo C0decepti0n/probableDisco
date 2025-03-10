@@ -15,7 +15,7 @@ function Search({theme}) {
   const [oEmbedData, setOEmbedData] = useState({}) // TODO maybe delete
   const [showDropdown, setShowDropdown] = useState(false) // Show Playlists
   const [playlists, setPlaylists] = useState([]); // All playlists
-  const [currentPlaylist, setCurrentPlaylist] = useState();  // Current Playlists
+  const [currentPlaylist, setCurrentPlaylist] = useState({});  // Current Playlists
   // Song Model
   const [selectedSong, setSelectedSong] = useState({
     trackId: 0,
@@ -27,16 +27,16 @@ function Search({theme}) {
   });
   // Playlist Model
   const [playlistAdd, setPlaylistAdd] = useState({
-    'name': String,
-    'tracks': {
-      'data': [
+    name: '',
+    tracks: {
+      data: [
           {
-          'trackId': Number,
-          'title': String,
-          'link': String,
-          'preview': String,
-          'artist': { 'name': String, 'id': Number},
-          'album': { 'title': String, 'id': Number },
+          trackId: 0,
+          title: '',
+          link: '',
+          preview: '',
+          artist: { name: '', id: 0},
+          album: { title: '', id: 0 },
           }
         ]
     }
@@ -181,10 +181,33 @@ function Search({theme}) {
   };
 
   // Add song from search results to Playlist
-  const addToPlaylist = (selectedSong, currentPlaylist) => {
-    console.log(selectedSong);
-    console.log(currentPlaylist);
-    // axios.patch(`/libraries`)
+  const addToPlaylist = () => {
+    
+    // Format selectio
+    const formattedSong = {
+      trackId: selectedSong.id,
+      title: selectedSong.title,
+      link: selectedSong.link,
+      preview: selectedSong.preview || '', // previews can be missing
+      artist: {
+        name: selectedSong.artist.name,
+        id: selectedSong.artist.id,
+      }, 
+      album: {
+        title: selectedSong.album.title,
+        id: selectedSong.album.id,
+      },
+    };
+   
+    const playlistToUpdate = playlists.find((p) => p._id === currentPlaylist);
+      if (!playlistToUpdate) {
+        console.error('Playlist not found');
+        return;
+      }
+    const newTracks = playlistToUpdate.tracks;
+    newTracks.data.push(formattedSong);
+    console.log(playlistToUpdate.tracks.data);
+    // console.log(formattedSong); 
   };
   
   return (
@@ -267,7 +290,7 @@ function Search({theme}) {
               {/* Dropdown for selecting playlist */}
               {showDropdown && (
                 <div>
-                  <select onChange={(e) => setCurrentPlaylist(e.target.value)}>
+                  <select onChange={(e) => {setCurrentPlaylist(e.target.value);setSelectedSong(result)}}>
                     <option value="" disabled selected>Select a Playlist</option>
                     {playlists.map((playlist) => (
                       <option key={playlist._id} value={playlist._id}>
