@@ -10,6 +10,7 @@ import Library from './Library.jsx';
 import Comments from './Comments.jsx';
 import Queue from './Queue.jsx';
 import Logo from '../images/slimewire.png';
+import Slime from '../images/cute-green-slime-monster.png'
 
 function App() {
   const [themes, setThemes] = useState([]);
@@ -49,8 +50,8 @@ function App() {
           }
         `}
       </style>
-      <div>
-        <img src={Logo} alt='App Logo' style={{ height: 115, width: 500 }} />
+      <div style={{background:theme.secondaryColor, borderColor:theme.tertiaryColor, borderWidth:5, borderStyle:'solid', borderRadius:theme.borderRadius}}>
+        <img src={Logo} alt='App Logo' style={{ height: 115, width: 500, display: 'block', marigin: '0 auto', alignItems:'center'}} />
         {/* Nav Links */}
         <nav className='nav'>
           <ul style={{ listStyleType: 'none' }}>
@@ -74,7 +75,7 @@ function App() {
             <Route path='/home' element={
               <div>
                 <h1 style={{ fontFamily: 'creepster' }}>Get Slimed</h1>
-                <img src={currentImage} style={{ width: '50%', height: 'auto' }} />
+                <img src={Slime} style={{ width: '50%', height: 'auto' }} />
               </div>
             }/>
 
