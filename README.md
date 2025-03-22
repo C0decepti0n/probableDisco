@@ -28,9 +28,9 @@ To get this project running, you must follow these steps:
 9. API from [Deezer for Developers](https://developers.deezer.com/api)
 
 # Contributers
-- Product Owner = Charles
+- Product Owner =  Charles
 - Scrum Master = Mary Alice and Peyton
-- Dev Team = Charles, Mary Alice, Peyton, Jay, and Whitley
+- Dev Team = [Charles](https://github.com/BMH397), [Mary Alice](https://github.com/malicesand), [Peyton](https://github.com/PeytonStrahan), [Jay](https://github.com/taytay836), and [Whitley](https://github.com/Wlegard)
 
 
 # Links:  
