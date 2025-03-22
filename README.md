@@ -25,6 +25,7 @@ To get this project running, you must follow these steps:
 6. Run “npm run build” in the same terminal after the “npm install” command is done running.
 7. In a new terminal, run “npm start”.
 8. Follow the link that pops up in the terminal or go to [http://localhost:3000](http://localhost:3000/) in your browser to see the running application.
+9. API from [Deezer for Developers](https://developers.deezer.com/api)
 
 # Contributers
 - Product Owner = Charles
