@@ -17,6 +17,7 @@ Using oEmbed and Deezer, users can sample tracks inside slimewire.
 
 ## Getting Started & Dev Setup
 To get this project running, you must follow these steps:
+
 1. Make sure that you have npm, nvm, and node version 22 installed already.
 2. Make sure that you have installed MongoDB on your machine and that it is running. (This project was tested by installing and using the “sudo mongod –path ~” command on the MongoDB Community Edition for Ubuntu on Linux, which can be installed by using this guide: [Install MongoDB Community Edition on Ubuntu - MongoDB Manual v8.0 - MongoDB Docs](https://www.mongodb.com/docs/v8.0/tutorial/install-mongodb-on-ubuntu/#std-label-install-mdb-community-ubuntu). Instructions for installing other versions of MongoDB can be found on this site, but we can’t fully guarantee their compatibility with the project.)
 3. Create a copy of the config-example.js file and place the copy in the root directory, renaming the copied file to “config.js”.
