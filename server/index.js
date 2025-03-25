@@ -20,23 +20,23 @@ const sessionsRoute = require("./routes/sessions");
 const app = express();
 
 // Express session setup
-app.use(session({ secret: 'cats', resave:false, saveUnitialized: true })); // SWITCH TO ENV VARIABLE??
-app.use(passport.initialize());
-app.use(passport.session());
+/////app.use(session({ secret: 'cats', resave:false, saveUnitialized: true })); // SWITCH TO ENV VARIABLE??
+/////app.use(passport.initialize());
+/////app.use(passport.session());
 
 // React build path
 const distPath = path.resolve(__dirname, '../dist');
 
 // Google auth setup
-require('../auth.js');
+/////require('../auth.js');
 
 // helper to check if user is logged in
 function isLoggedIn(req, res, next) {
- req.user ? next() : res.sendStatus(401);
-
+/////  req.user ? next() : res.sendStatus(401);
+next(); //DELETE THIS LINE FUUUUUUUUUUUUUUUUUUU
 }
 // Auth routes
-
+/*
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['email', 'profile'] })
 );
@@ -56,7 +56,7 @@ app.get('/', (req, res) => {
   if (req.isAuthenticated()) {
     res.redirect('/home');
   } else {
-    res.send('<a href="/auth/google">Authenticate with Google</a>');
+    res.send('<a href='/auth/google'>Authenticate with Google</a>');
   }
 });
 
@@ -72,7 +72,7 @@ app.get('/logout', (req, res) => {
     res.redirect('/')
   })
 });
-
+*/
 
 // middleware
 app.use(express.json());
