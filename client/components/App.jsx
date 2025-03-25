@@ -47,6 +47,7 @@ function App() {
         {`
           html {
             cursor: url(${theme.cursor}), auto;
+            background: ${theme.secondaryColor};
           }
         `}
       </style>
