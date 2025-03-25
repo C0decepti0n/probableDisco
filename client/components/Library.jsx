@@ -162,7 +162,7 @@ function Library({theme}) {
                   <ul className="show-tracks" style={{ listStyleType: "none" }}> 
                   {playlist.tracks.data.map((track, index) => (
                     <li key={index}>
-                      {track.title}
+                      {track.title} - {track.artist.name}
                       <div>
                       <button onClick={() => deleteTrack(playlist, track, index)}>
                     🗑 Delete
