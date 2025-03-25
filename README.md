@@ -34,6 +34,20 @@ To get this project running, you must follow these steps:
 - Scrum Master = Mary Alice and Peyton
 - Dev Team = [Charles](https://github.com/BMH397), [Mary Alice](https://github.com/malicesand), [Peyton](https://github.com/PeytonStrahan), [Jay](https://github.com/taytay836), and [Whitley](https://github.com/Wlegard)
 
+# Tech Stack
+- API: Deezer
+- Database: MongoDB and Mongoose
+- Client-Side: Reactjs
+- Server-Side: Express
+- Linting: ESLint
+- Compiling: Webpack and Babel
+- Deployment: AWS
+- Authentication: Google OAuth 2.0 and Passport
+
+# Known Bugs
+- Users are not saved in state
+- Custom cursors apply to most of the screen instead of all of the screen
+- Invalid theme inputs are not handled (excluding empty fields)
 
 # Links:  
 Style Guide: [STYLE-GUIDE](STYLE-GUIDE.md)  
